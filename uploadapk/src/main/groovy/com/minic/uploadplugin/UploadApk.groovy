@@ -1,5 +1,6 @@
 package com.minic.uploadplugin
 
+import okhttp3.OkHttpClient
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -35,9 +36,10 @@ class UploadApk implements Plugin<Project> {
                 println("uKeyPgyer:" + uKeyPgyer)
                 println("installTypePgyer:" + installTypePgyer)
                 println("passWordPgyer:" + passWordPgyer)
+                OkHttpClient okHttpClient = new OkHttpClient.Builder().build()
+                println("okHttpClient:" + okHttpClient.toString())
             }
         }
-
 
 
         project.task("assembleWithPgyer").doLast {

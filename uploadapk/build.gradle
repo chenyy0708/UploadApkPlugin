@@ -1,31 +1,31 @@
 apply plugin: 'java-library'
 apply plugin: 'groovy'
-apply plugin: 'maven'
-//apply plugin: 'com.github.dcendents.android-maven'
 
-//group='com.github.chenyy0708'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'com.github.chenyy0708'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation gradleApi()//gradle sdk
     implementation localGroovy()//groovy sdk
-//    implementation 'com.squareup.okhttp3:okhttp:3.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.9.0'
 }
 
-repositories {
-    mavenCentral()
-}
+//repositories {
+//    mavenCentral()
+//}
 
-group='com.minic.uploadplugin'
-version='1.0.0'
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: uri('../repo'))
-        }
-    }
-}
+//group='com.minic.uploadplugin'
+//version='1.0.0'
+//
+//uploadArchives {
+//    repositories {
+//        mavenDeployer {
+//            repository(url: uri('../repo'))
+//        }
+//    }
+//}
 
 sourceCompatibility = "7"
 targetCompatibility = "7"
