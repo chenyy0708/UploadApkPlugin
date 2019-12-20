@@ -19,67 +19,57 @@ class UploadApk implements Plugin<Project> {
             project.android.applicationVariants.all { variant ->
                 String variantName = variant.name.capitalize()
                 if (variantName == "Debug") {
-                    Task uploadFir = createUploadFirTask(project)
-                    Task uploadPgyer = createUploadPgyerTask(project)
+                    Task uploadFir = project.task("assembleWithFir").doLast {
+                        println("开始上传Fir")
+                        String appName = extension.appName
+                        String appPackage = project.android.defaultConfig.applicationId
+                        String appVersion = project.android.defaultConfig.versionName
+                        String appBuild = project.android.defaultConfig.versionCode
+                        String apkPath = project.android.applicationVariants.first().outputs.first().outputFile
+                        String apkIconPath = project.android.applicationVariants.first().outputs.first().outputFile.parent.split("build")[0] +
+                                "src/main/res/" + extension.appIconPath
+                        String apiTokenFir = extension.apiTokenFir
+                        // 获取上传凭证
+                        JSONObject infoObj = getUploadCertificate(appPackage, apiTokenFir)
+                        // 上传apk
+                        uploadApkToFir(appName, appVersion, appBuild, apkPath, infoObj)
+                        // 上传icon
+                        uploadIconToFir(apkIconPath, infoObj)
+                        // 获取成功连接
+                        getUploadSuccessUrl(appPackage, apiTokenFir)
+                    }
+                    Task uploadPgyer = project.task("assembleWithPgyer").doLast {
+                        println("开始上传蒲公英...")
+                        String apkPath = project.android.applicationVariants.first().outputs.first().outputFile
+                        String apiKeyPgyer = extension.apiKeyPgyer
+                        String uKeyPgyer = extension.uKeyPgyer
+                        String installTypePgyer = extension.installTypePgyer
+                        String passWordPgyer = extension.passWordPgyer
+
+                        OkHttpClient client = new OkHttpClient.Builder()
+                                .connectTimeout(10, TimeUnit.SECONDS)
+                                .readTimeout(60, TimeUnit.SECONDS).build()
+                        RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), new File(apkPath))
+
+                        MultipartBody body = new MultipartBody.Builder()
+                                .setType(MediaType.parse("multipart/form-data"))
+                                .addFormDataPart("uKey", uKeyPgyer)
+                                .addFormDataPart("_api_key", apiKeyPgyer)
+                                .addFormDataPart("installType", installTypePgyer)
+                                .addFormDataPart("password", passWordPgyer)
+                                .addFormDataPart("file", "boohee.apk", fileBody)
+                                .build()
+                        Request request = new Request.Builder().url("https://upload.pgyer.com/apiv1/app/upload").post(body).build()
+                        Response response = client.newCall(request).execute()
+                        String json = response.body().string()
+                        println("上传蒲公英apk文件返回结果:" + json)
+                    }
                     // 在assembleDebug执行后执行
                     uploadFir.dependsOn project.tasks["assembleDebug"]
                     uploadPgyer.dependsOn project.tasks["assembleDebug"]
                 }
             }
         }
-    }
-
-    private Task createUploadFirTask(Project project) {
-        Task uploadFir = project.task("assembleWithFir").doLast {
-            println("开始上传Fir")
-            String appName = extension.appName
-            String appPackage = project.android.defaultConfig.applicationId
-            String appVersion = project.android.defaultConfig.versionName
-            String appBuild = project.android.defaultConfig.versionCode
-            String apkPath = project.android.applicationVariants.first().outputs.first().outputFile
-            String apkIconPath = project.android.applicationVariants.first().outputs.first().outputFile.parent.split("build")[0] +
-                    "src/main/res/" + extension.appIconPath
-            String apiTokenFir = extension.apiTokenFir
-            // 获取上传凭证
-            JSONObject infoObj = getUploadCertificate(appPackage, apiTokenFir)
-            // 上传apk
-            uploadApkToFir(appName, appVersion, appBuild, apkPath, infoObj)
-            // 上传icon
-            uploadIconToFir(apkIconPath, infoObj)
-            // 获取成功连接
-            getUploadSuccessUrl(appPackage, apiTokenFir)
-        }
-        return uploadFir
-    }
-
-    private Task createUploadPgyerTask(Project project) {
-        Task uploadPgyer = project.task("assembleWithPgyer").doLast {
-            println("开始上传蒲公英...")
-            String apkPath = project.android.applicationVariants.first().outputs.first().outputFile
-            String apiKeyPgyer = extension.apiKeyPgyer
-            String uKeyPgyer = extension.uKeyPgyer
-            String installTypePgyer = extension.installTypePgyer
-            String passWordPgyer = extension.passWordPgyer
-
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .connectTimeout(10, TimeUnit.SECONDS)
-                    .readTimeout(60, TimeUnit.SECONDS).build()
-            RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), new File(apkPath))
-
-            MultipartBody body = new MultipartBody.Builder()
-                    .setType(MediaType.parse("multipart/form-data"))
-                    .addFormDataPart("uKey", uKeyPgyer)
-                    .addFormDataPart("_api_key", apiKeyPgyer)
-                    .addFormDataPart("installType", installTypePgyer)
-                    .addFormDataPart("password", passWordPgyer)
-                    .addFormDataPart("file", "boohee.apk", fileBody)
-                    .build()
-            Request request = new Request.Builder().url("https://upload.pgyer.com/apiv1/app/upload").post(body).build()
-            Response response = client.newCall(request).execute()
-            String json = response.body().string()
-            println("上传蒲公英apk文件返回结果:" + json)
-        }
-        return uploadPgyer
     }
 
     private JSONObject getUploadCertificate(String bundle_id, String api_token) {
