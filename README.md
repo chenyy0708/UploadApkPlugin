@@ -45,14 +45,14 @@ uploadApkInfo {
     // 测试平台显示的图片icon，只需要配置drawable/mipmap路径即可
     appIconPath = "mipmap-xxhdpi/ic_launcher.png"
     // Fir.im平台apitoken
-    apiTokenFir = "368967b71745181a78ea8cb01ab237c5"
+    apiTokenFir = "xxxxxxxx"
     // 蒲公英平台配置信息
-    uKeyPgyer = "555a5e675f08277800b9a72ca447518f"
-    apiKeyPgyer = "6f3611f328fea966c664d482be682040"
+    uKeyPgyer = "xxxxxxx"
+    apiKeyPgyer = "xxxxxxx"
     // 蒲公英上传的类型
     installTypePgyer = "2"
     // 蒲公英平台安装密码，蒲公英更新之后都需要，否则无法上传app
-    passWordPgyer = "123456"
+    passWordPgyer = "xxxxx"
     
 }
 ```
