@@ -19,6 +19,7 @@ class UploadApk implements Plugin<Project> {
             project.android.applicationVariants.all { variant ->
                 String variantName = variant.name.capitalize()
                 if (variantName == "Debug") {
+                    // Fir上传
                     Task uploadFir = project.task("assembleWithFir").doLast {
                         println("开始上传Fir")
                         String appName = extension.appName
@@ -30,14 +31,62 @@ class UploadApk implements Plugin<Project> {
                                 "src/main/res/" + extension.appIconPath
                         String apiTokenFir = extension.apiTokenFir
                         // 获取上传凭证
-                        JSONObject infoObj = getUploadCertificate(appPackage, apiTokenFir)
+                        println("获取上传凭证...")
+                        OkHttpClient client = new OkHttpClient.Builder()
+                                .connectTimeout(10, TimeUnit.SECONDS)
+                                .readTimeout(60, TimeUnit.SECONDS).build()
+                        FormBody.Builder build = new FormBody.Builder()
+                        build.add("bundle_id", appPackage)
+                        build.add("api_token", apiTokenFir)
+                        build.add("type", "android")
+                        Request request = new Request.Builder().url("http://api.fir.im/apps").post(build.build()).build()
+                        Response response = client.newCall(request).execute()
+                        String is = response.body().string()
+                        println("获取凭证信息成功")
+                        JSONObject jsonObject = new JSONObject(is)
                         // 上传apk
-                        uploadApkToFir(appName, appVersion, appBuild, apkPath, infoObj)
+                        println("上传apk中...")
+                        String key = jsonObject.getJSONObject("cert").getJSONObject("binary").getString("key")
+                        String token = jsonObject.getJSONObject("cert").getJSONObject("binary").getString("token")
+                        String upload_url = jsonObject.getJSONObject("cert").getJSONObject("binary").getString("upload_url")
+                        RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), new File(apkPath))
+                        MultipartBody body = new MultipartBody.Builder()
+                                .setType(MediaType.parse("multipart/form-data"))
+                                .addFormDataPart("key", key)
+                                .addFormDataPart("token", token)
+                                .addFormDataPart("x:name", appName)
+                                .addFormDataPart("x:version", appVersion)
+                                .addFormDataPart("x:build", appBuild)
+                                .addFormDataPart("file", "boohee.apk", fileBody)
+                                .build()
+                        Request requestApk = new Request.Builder().url(upload_url).post(body).build()
+                        Response responseApk = client.newCall(requestApk).execute()
+                        String jsonApk = responseApk.body().string()
+                        println("上传apk文件返回结果:" + jsonApk)
                         // 上传icon
-                        uploadIconToFir(apkIconPath, infoObj)
+                        println("上传Icon中...")
+                        String keyIcon = jsonObject.getJSONObject("cert").getJSONObject("icon").getString("key")
+                        String tokenIcon = jsonObject.getJSONObject("cert").getJSONObject("icon").getString("token")
+                        String upload_urlIcon = jsonObject.getJSONObject("cert").getJSONObject("icon").getString("upload_url")
+                        RequestBody fileBodyIcon = RequestBody.create(MediaType.parse("application/octet-stream"), new File(apkIconPath))
+                        MultipartBody bodyIcon = new MultipartBody.Builder()
+                                .setType(MediaType.parse("multipart/form-data"))
+                                .addFormDataPart("key", keyIcon)
+                                .addFormDataPart("token", tokenIcon)
+                                .addFormDataPart("file", "icon.png", fileBodyIcon)
+                                .build()
+                        Request requestIcon = new Request.Builder().url(upload_urlIcon).post(bodyIcon).build()
+                        Response responseIcon = client.newCall(requestIcon).execute()
+                        String jsonIcon = responseIcon.body().string()
+                        println("上传Icon返回结果:" + jsonIcon)
                         // 获取成功连接
-                        getUploadSuccessUrl(appPackage, apiTokenFir)
+                        String queryurl = "http://api.fir.im/apps/latest/" + appPackage + "?api_token=" + apiTokenFir + "&type=android"
+                        Request requestUrl = new Request.Builder().url(queryurl).get().build()
+                        Response responseUrl = client.newCall(requestUrl).execute()
+                        String isUrl = responseUrl.body().string()
+                        println("下载链接:" + isUrl)
                     }
+                    // 蒲公英上传
                     Task uploadPgyer = project.task("assembleWithPgyer").doLast {
                         println("开始上传蒲公英...")
                         String apkPath = project.android.applicationVariants.first().outputs.first().outputFile
@@ -70,88 +119,5 @@ class UploadApk implements Plugin<Project> {
                 }
             }
         }
-    }
-
-    private JSONObject getUploadCertificate(String bundle_id, String api_token) {
-        println("获取上传凭证...")
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS).build()
-
-        FormBody.Builder build = new FormBody.Builder()
-        build.add("bundle_id", bundle_id)
-        build.add("api_token", api_token)
-        build.add("type", "android")
-        Request request = new Request.Builder().url("http://api.fir.im/apps").post(build.build()).build()
-        Response response = client.newCall(request).execute()
-        if (response == null || response.body() == null) return null
-        String is = response.body().string()
-        println("获取凭证信息成功")
-        JSONObject json = new JSONObject(is)
-        return json
-    }
-
-    private void uploadApkToFir(String appName, String appVersion, String appBuild, String apkPath, JSONObject jsonObject) {
-        println("上传apk中...")
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS).build()
-        String key = jsonObject.getJSONObject("cert").getJSONObject("binary").getString("key")
-        String token = jsonObject.getJSONObject("cert").getJSONObject("binary").getString("token")
-        String upload_url = jsonObject.getJSONObject("cert").getJSONObject("binary").getString("upload_url")
-
-        RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), new File(apkPath))
-
-        MultipartBody body = new MultipartBody.Builder()
-                .setType(MediaType.parse("multipart/form-data"))
-                .addFormDataPart("key", key)
-                .addFormDataPart("token", token)
-                .addFormDataPart("x:name", appName)
-                .addFormDataPart("x:version", appVersion)
-                .addFormDataPart("x:build", appBuild)
-                .addFormDataPart("file", "boohee.apk", fileBody)
-                .build()
-
-        Request request = new Request.Builder().url(upload_url).post(body).build()
-        Response response = client.newCall(request).execute()
-        String json = response.body().string()
-        println("上传apk文件返回结果:" + json)
-    }
-
-    private void uploadIconToFir(String apkIconPath, JSONObject jsonObject) {
-        println("上传Icon中...")
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS).build()
-        String key = jsonObject.getJSONObject("cert").getJSONObject("icon").getString("key")
-        String token = jsonObject.getJSONObject("cert").getJSONObject("icon").getString("token")
-        String upload_url = jsonObject.getJSONObject("cert").getJSONObject("icon").getString("upload_url")
-
-        RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), new File(apkIconPath))
-
-        MultipartBody body = new MultipartBody.Builder()
-                .setType(MediaType.parse("multipart/form-data"))
-                .addFormDataPart("key", key)
-                .addFormDataPart("token", token)
-                .addFormDataPart("file", "icon.png", fileBody)
-                .build()
-        Request request = new Request.Builder().url(upload_url).post(body).build()
-        Response response = client.newCall(request).execute()
-        String json = response.body().string()
-        println("上传Icon返回结果:" + json)
-    }
-
-    private void getUploadSuccessUrl(String appPackage, String apiToken) {
-        String queryurl = "http://api.fir.im/apps/latest/" + appPackage + "?api_token=" + apiToken + "&type=android"
-
-        println(queryurl)
-
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS).build()
-        Request request = new Request.Builder().url(queryurl).get().build()
-        Response response = client.newCall(request).execute()
-        String is = response.body().string()
-        println("下载链接:" + is)
     }
 }

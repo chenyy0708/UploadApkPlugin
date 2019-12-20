@@ -18,7 +18,7 @@ repositories {
     mavenCentral()
     jcenter()
 }
-//
+
 //apply plugin: 'maven'
 //
 //group='com.minic.uploadplugin'
