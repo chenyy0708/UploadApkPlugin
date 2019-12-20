@@ -1,7 +1,6 @@
 package com.minic.uploadplugin
 
-
-import okhttp3.MultipartBody
+import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -9,19 +8,14 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 
+import java.util.concurrent.TimeUnit
+
 class UploadApk implements Plugin<Project> {
 
     UploadApkPluginExtension extension
-    OkHttpClient okHttpClient
 
     @Override
     void apply(Project project) {
-        okHttpClient = new OkHttpClient.Builder()
-                .build()
-        client.setConnectTimeout(10, TimeUnit.SECONDS)
-        client.setReadTimeout(60, TimeUnit.SECONDS)
-
-
         extension = project.extensions.create('uploadApkInfo', UploadApkPluginExtension)
         if (project.android.hasProperty("applicationVariants")) {
             project.android.applicationVariants.all { variant ->
@@ -82,14 +76,17 @@ class UploadApk implements Plugin<Project> {
     }
 
     private void getUploadCertificate(String bundle_id, String api_token) {
-//        MultipartBody build = new MultipartBody.Builder()
-//        build.type(MultipartBuilder.FORM)
-//        build.addFormDataPart("api_token", api_token)
-//        build.addFormDataPart("bundle_id", bundle_id)
-//        build.addFormDataPart("type", "android")
-//        Request request = new Request.Builder().url(endpoint).post(build.build()).build()
-//        Response response = client.newCall(request).execute()
-//        String is = response.body().string()
-//        println("getAppinfo result:" + is)
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS).build()
+
+        FormBody.Builder build = new FormBody.Builder()
+        build.add("bundle_id", bundle_id)
+        build.add("api_token", api_token)
+        build.add("type", "android")
+        Request request = new Request.Builder().url("http://api.fir.im/apps").post(build.build()).build()
+        Response response = client.newCall(request).execute()
+        String is = response.body().string()
+        println("getAppinfo result:" + is)
     }
 }
