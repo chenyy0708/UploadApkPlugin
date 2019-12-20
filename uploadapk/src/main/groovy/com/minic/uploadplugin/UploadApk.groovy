@@ -11,14 +11,30 @@ class UploadApk implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
+        println "=============================="
+        println 'hello, DemoPlugin!'
+        println "=============================="
+
+
         extension = project.extensions.create('uploadApkInfo', UploadApkPluginExtension)
+
         if (project.android.hasProperty("applicationVariants")) {
-            Task uploadFir = createUploadFirTask(project)
-            Task uploadPgyer = createUploadPgyerTask(project)
+            project.android.applicationVariants.all { variant ->
+                String variantName = variant.name.capitalize()
+                if (variantName.equals("Debug")) {
+                    Task uploadFir = createUploadFirTask(project)
+                    Task uploadPgyer = createUploadPgyerTask(project)
+                    // 在assembleDebug执行后执行
+                    uploadFir.dependsOn project.tasks["assembleDebug"]
+                    uploadPgyer.dependsOn project.tasks["assembleDebug"]
+                }
+            }
+
         }
     }
 
     private Task createUploadFirTask(Project project) {
+        println("upload:create uploadFirTak")
         Task uploadFir = project.task("assembleWithFir").doLast {
             println("开始上传Fir")
             String appName = extension.appName
