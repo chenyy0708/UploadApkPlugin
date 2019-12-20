@@ -1,17 +1,17 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-//apply plugin: 'upload.apk'
-//
-//uploadApkInfo {
-//    appName = "TestApp"
-//    appIconPath = "mipmap-xxhdpi/ic_launcher.png"
-//    apiTokenFir = "368967b71745181a78ea8cb01ab237c5"
-//    uKeyPgyer = "555a5e675f08277800b9a72ca447518f"
-//    apiKeyPgyer = "6f3611f328fea966c664d482be682040"
-//    installTypePgyer = "2"
-//    passWordPgyer = "123456"
-//}
+apply plugin: 'upload.apk'
+
+uploadApkInfo {
+    appName = "TestApp"
+    appIconPath = "mipmap-xxhdpi/ic_launcher.png"
+    apiTokenFir = "368967b71745181a78ea8cb01ab237c5"
+    uKeyPgyer = "555a5e675f08277800b9a72ca447518f"
+    apiKeyPgyer = "6f3611f328fea966c664d482be682040"
+    installTypePgyer = "2"
+    passWordPgyer = "123456"
+}
 //
 //
 //buildscript {
