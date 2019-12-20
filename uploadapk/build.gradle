@@ -11,6 +11,7 @@ dependencies {
     implementation gradleApi()//gradle sdk
     implementation localGroovy()//groovy sdk
     api 'com.squareup.okhttp3:okhttp:3.12.0'
+    api 'org.json:json:20180130'
 }
 
 repositories {
