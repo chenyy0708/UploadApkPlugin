@@ -59,7 +59,22 @@ uploadApkInfo {
 
 ##### 2. 使用
 
-> 只需要双击`AS`的`gradle`脚本
+> 第一种方法在控制台输入:
+
+```
+Windows
+
+gradlew assembleWithFir // 上传Fir.im
+gradlew assembleWithPgyer // 上传蒲公英
+
+Mac 
+
+./gradlew assembleWithFir // 上传Fir.im
+./gradlew assembleWithPgyer // 上传蒲公英
+```
+
+
+> 第二种方法只需要双击`AS`的`gradle`脚本
 
 
 **上传蒲公英**
