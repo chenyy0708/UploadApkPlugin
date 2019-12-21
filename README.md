@@ -45,28 +45,43 @@ uploadApkInfo {
     // 测试平台显示的图片icon，只需要配置drawable/mipmap路径即可
     appIconPath = "mipmap-xxhdpi/ic_launcher.png"
     // Fir.im平台apitoken
-    apiTokenFir = "368967b71745181a78ea8cb01ab237c5"
+    apiTokenFir = "xxxxxxxx"
     // 蒲公英平台配置信息
-    uKeyPgyer = "555a5e675f08277800b9a72ca447518f"
-    apiKeyPgyer = "6f3611f328fea966c664d482be682040"
+    uKeyPgyer = "xxxxxxx"
+    apiKeyPgyer = "xxxxxxx"
     // 蒲公英上传的类型
     installTypePgyer = "2"
     // 蒲公英平台安装密码，蒲公英更新之后都需要，否则无法上传app
-    passWordPgyer = "123456"
+    passWordPgyer = "xxxxx"
     
 }
 ```
 
 ##### 2. 使用
 
-> 只需要双击`AS`的`gradle`脚本
+> 第一种方法在控制台输入:
+
+```
+Windows
+
+gradlew assembleWithFir // 上传Fir.im
+gradlew assembleWithPgyer // 上传蒲公英
+
+Mac 
+
+./gradlew assembleWithFir // 上传Fir.im
+./gradlew assembleWithPgyer // 上传蒲公英
+```
+
+
+> 第二种方法只需要双击`AS`的`gradle`脚本
 
 
 **上传蒲公英**
 `AS右侧边栏->app->Task->other->assembleWithPgyer`
 
 **上传Fir .im**
-`AS右侧边栏->app->Task->other->assembleWithFirim`
+`AS右侧边栏->app->Task->other->assembleWithFir`
 
 
 > 示例图
