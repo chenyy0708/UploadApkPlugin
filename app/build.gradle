@@ -38,12 +38,33 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+
+        release {
+            storeFile file("superfarm.keystore")
+            keyAlias "superfarm"
+            storePassword "amoviewhnc09"
+            keyPassword "amoviewhnc"
+        }
+
+        debug {
+            storeFile file("superfarm.keystore")
+            keyAlias "superfarm"
+            storePassword "amoviewhnc09"
+            keyPassword "amoviewhnc"
+        }
+
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
+            signingConfig signingConfigs.debug
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
