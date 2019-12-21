@@ -66,7 +66,7 @@ uploadApkInfo {
 `AS右侧边栏->app->Task->other->assembleWithPgyer`
 
 **上传Fir .im**
-`AS右侧边栏->app->Task->other->assembleWithFirim`
+`AS右侧边栏->app->Task->other->assembleWithFir`
 
 
 > 示例图
