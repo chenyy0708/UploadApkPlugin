@@ -1,8 +1,7 @@
-//apply plugin: 'java-library'
 apply plugin: 'groovy'
 
 
-//apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.github.chenyy0708'
 
@@ -21,18 +20,18 @@ repositories {
     jcenter()
 }
 
-apply plugin: 'maven'
-
-group='com.minic.uploadplugin'
-version='1.0.0'
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: uri('../repo'))
-        }
-    }
-}
+//apply plugin: 'maven'
+//
+//group='com.minic.uploadplugin'
+//version='1.0.0'
+//
+//uploadArchives {
+//    repositories {
+//        mavenDeployer {
+//            repository(url: uri('../repo'))
+//        }
+//    }
+//}
 
 sourceCompatibility = "7"
 targetCompatibility = "7"

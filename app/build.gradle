@@ -14,17 +14,17 @@ uploadApkInfo {
 }
 
 
-buildscript {
-    repositories {
-        maven {
-            url uri('../repo')
-        }
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.minic.uploadplugin:uploadapk:1.0.0'
-    }
-}
+//buildscript {
+//    repositories {
+//        maven {
+//            url uri('../repo')
+//        }
+//        jcenter()
+//    }
+//    dependencies {
+//        classpath 'com.minic.uploadplugin:uploadapk:1.0.0'
+//    }
+//}
 
 
 android {
