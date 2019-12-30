@@ -1,18 +1,18 @@
-apply plugin: 'java-library'
+//apply plugin: 'java-library'
 apply plugin: 'groovy'
 
 
-apply plugin: 'com.github.dcendents.android-maven'
+//apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.github.chenyy0708'
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation gradleApi()//gradle sdk
-    implementation localGroovy()//groovy sdk
-    api 'com.squareup.okhttp3:okhttp:3.12.0'
-    api 'org.json:json:20180130'
-    runtime 'com.squareup.okhttp3:okhttp:3.12.0'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile gradleApi()//gradle sdk
+    compile localGroovy()//groovy sdk
+    compile 'com.squareup.okhttp3:okhttp:3.8.0'
+    compile 'org.json:json:20180130'
+    runtime 'com.squareup.okhttp3:okhttp:3.8.0'
     runtime 'org.json:json:20180130'
 }
 
@@ -21,18 +21,18 @@ repositories {
     jcenter()
 }
 
-//apply plugin: 'maven'
-//
-//group='com.minic.uploadplugin'
-//version='1.0.0'
-//
-//uploadArchives {
-//    repositories {
-//        mavenDeployer {
-//            repository(url: uri('../repo'))
-//        }
-//    }
-//}
+apply plugin: 'maven'
+
+group='com.minic.uploadplugin'
+version='1.0.0'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('../repo'))
+        }
+    }
+}
 
 sourceCompatibility = "7"
 targetCompatibility = "7"
