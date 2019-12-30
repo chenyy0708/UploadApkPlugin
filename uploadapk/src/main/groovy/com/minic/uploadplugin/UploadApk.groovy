@@ -10,6 +10,8 @@ import java.util.concurrent.TimeUnit
 
 class UploadApk implements Plugin<Project> {
 
+    private int connectTime = 2000
+
     UploadApkPluginExtension extension
 
     @Override
@@ -32,8 +34,8 @@ class UploadApk implements Plugin<Project> {
                         // 获取上传凭证
                         println("获取上传凭证...")
                         OkHttpClient client = new OkHttpClient.Builder()
-                                .connectTimeout(10, TimeUnit.SECONDS)
-                                .readTimeout(60, TimeUnit.SECONDS).build()
+                                .connectTimeout(connectTime, TimeUnit.SECONDS)
+                                .readTimeout(connectTime, TimeUnit.SECONDS).build()
                         FormBody.Builder build = new FormBody.Builder()
                         build.add("bundle_id", appPackage)
                         build.add("api_token", apiTokenFir)
@@ -95,8 +97,8 @@ class UploadApk implements Plugin<Project> {
                         String passWordPgyer = extension.passWordPgyer
 
                         OkHttpClient client = new OkHttpClient.Builder()
-                                .connectTimeout(10, TimeUnit.SECONDS)
-                                .readTimeout(60, TimeUnit.SECONDS).build()
+                                .connectTimeout(connectTime, TimeUnit.SECONDS)
+                                .readTimeout(connectTime, TimeUnit.SECONDS).build()
                         RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), new File(apkPath))
 
                         MultipartBody body = new MultipartBody.Builder()
