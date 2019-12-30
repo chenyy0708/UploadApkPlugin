@@ -27,8 +27,7 @@ class UploadApk implements Plugin<Project> {
                         String appVersion = project.android.defaultConfig.versionName
                         String appBuild = project.android.defaultConfig.versionCode
                         String apkPath = project.android.applicationVariants.first().outputs.first().outputFile
-                        String apkIconPath = project.android.applicationVariants.first().outputs.first().outputFile.parent.split("build")[0] +
-                                "src/main/res/" + extension.appIconPath
+                        String apkIconPath = project.android.applicationVariants.first().outputs.first().outputFile.parent.split("build")[0] + extension.appIconPath
                         String apiTokenFir = extension.apiTokenFir
                         // 获取上传凭证
                         println("获取上传凭证...")
