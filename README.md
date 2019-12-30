@@ -42,8 +42,8 @@ uploadApkInfo {
 
     // 测试平台显示的应用名
     appName = "TestApp"
-    // 测试平台显示的图片icon，只需要配置drawable/mipmap路径即可
-    appIconPath = "mipmap-xxhdpi/ic_launcher.png"
+    // 测试平台显示的图片icon，只需要配置app文件夹之后的路径即可，例如src/main/res/drawable/mipmap路径即可
+    appIconPath = "src/main/res/drawable/mipmap-xxhdpi/ic_launcher.png"
     // Fir.im平台apitoken
     apiTokenFir = "xxxxxxxx"
     // 蒲公英平台配置信息
