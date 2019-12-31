@@ -3,28 +3,32 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 //apply plugin: 'upload.apk'
 //
-//uploadApkInfo {
-//    appName = "TestApp"
-//    appIconPath = "mipmap-xxhdpi/ic_launcher.png"
-//    apiTokenFir = "368967b71745181a78ea8cb01ab237c5"
-//    uKeyPgyer = "555a5e675f08277800b9a72ca447518f"
-//    apiKeyPgyer = "6f3611f328fea966c664d482be682040"
-//    installTypePgyer = "2"
-//    passWordPgyer = "123456"
-//}
-//
-//
-//buildscript {
-//    repositories {
-//        maven {
-//            url uri('../repo')
-//        }
-//        jcenter()
+//uploadApk {
+//    fir {
+//        appName = "TestApp"
+//        iconPath = "src/main/res/mipmap-xxhdpi/ic_launcher.png"
+//        token = "368967b71745181a78ea8cb01ab237c5"
 //    }
-//    dependencies {
-//        classpath 'com.minic.uploadplugin:uploadapk:1.0.0'
+//    pgyer {
+//        apiKey = "6f3611f328fea966c664d482be682040"
+//        uKey = "555a5e675f08277800b9a72ca447518f"
+//        password = "123456"
+//        installType = "2"
 //    }
 //}
+
+
+buildscript {
+    repositories {
+        maven {
+            url uri('../repo')
+        }
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.minic.uploadplugin:uploadapk:1.0.0'
+    }
+}
 
 
 android {
