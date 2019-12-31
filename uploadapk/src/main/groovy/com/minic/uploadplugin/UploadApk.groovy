@@ -4,6 +4,8 @@ import okhttp3.*
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.internal.reflect.Instantiator
+import org.gradle.invocation.DefaultGradle
 import org.json.JSONObject
 
 import java.util.concurrent.TimeUnit
@@ -16,7 +18,10 @@ class UploadApk implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        extension = project.extensions.create('uploadApkInfo', UploadApkPluginExtension)
+        Instantiator instantiator = ((DefaultGradle) project.getGradle()).getServices().get(Instantiator.class)
+        println("instantiator:${instantiator.toString()}")
+        extension = project.extensions.create('uploadApk', UploadApkPluginExtension.class, new Object[1]{instantiator})
+
         if (project.android.hasProperty("applicationVariants")) {
             project.android.applicationVariants.all { variant ->
                 String variantName = variant.name.capitalize()
@@ -24,13 +29,13 @@ class UploadApk implements Plugin<Project> {
                     // Fir上传
                     Task uploadFir = project.task("assembleWithFir").doLast {
                         println("开始上传Fir")
-                        String appName = extension.appName
+                        String appName = extension.getFirExtension().getAppName()
                         String appPackage = project.android.defaultConfig.applicationId
                         String appVersion = project.android.defaultConfig.versionName
                         String appBuild = project.android.defaultConfig.versionCode
                         String apkPath = project.android.applicationVariants.first().outputs.first().outputFile
-                        String apkIconPath = project.android.applicationVariants.first().outputs.first().outputFile.parent.split("build")[0] + extension.appIconPath
-                        String apiTokenFir = extension.apiTokenFir
+                        String apkIconPath = project.android.applicationVariants.first().outputs.first().outputFile.parent.split("build")[0] + extension.getFirExtension().getIconPath()
+                        String apiTokenFir = extension.getFirExtension().getToken()
                         // 获取上传凭证
                         println("获取上传凭证...")
                         OkHttpClient client = new OkHttpClient.Builder()
@@ -91,10 +96,10 @@ class UploadApk implements Plugin<Project> {
                     Task uploadPgyer = project.task("assembleWithPgyer").doLast {
                         println("开始上传蒲公英...")
                         String apkPath = project.android.applicationVariants.first().outputs.first().outputFile
-                        String apiKeyPgyer = extension.apiKeyPgyer
-                        String uKeyPgyer = extension.uKeyPgyer
-                        String installTypePgyer = extension.installTypePgyer
-                        String passWordPgyer = extension.passWordPgyer
+                        String apiKeyPgyer = extension.getPgyerExtension().getApiKey()
+                        String uKeyPgyer = extension.getPgyerExtension().getuKey()
+                        String installTypePgyer = extension.getPgyerExtension().getInstallType()
+                        String passWordPgyer = extension.getPgyerExtension().getPassword()
 
                         OkHttpClient client = new OkHttpClient.Builder()
                                 .connectTimeout(connectTime, TimeUnit.SECONDS)
