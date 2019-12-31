@@ -20,7 +20,9 @@ class UploadApk implements Plugin<Project> {
     void apply(Project project) {
         Instantiator instantiator = ((DefaultGradle) project.getGradle()).getServices().get(Instantiator.class)
         println("instantiator:${instantiator.toString()}")
-        extension = project.extensions.create('uploadApk', UploadApkPluginExtension.class, new Object[1]{instantiator})
+        Object[] objects = [instantiator]
+        extension = project.extensions.create('uploadApk', UploadApkPluginExtension.class, objects)
+
 
         if (project.android.hasProperty("applicationVariants")) {
             project.android.applicationVariants.all { variant ->

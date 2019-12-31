@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'upload.apk'
+//apply plugin: 'upload.apk'
 //
 //uploadApk {
 //    fir {
@@ -17,18 +17,18 @@ apply plugin: 'upload.apk'
 //    }
 //}
 
-
-buildscript {
-    repositories {
-        maven {
-            url uri('../repo')
-        }
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.minic.uploadplugin:uploadapk:1.0.0'
-    }
-}
+//
+//buildscript {
+//    repositories {
+//        maven {
+//            url uri('../repo')
+//        }
+//        jcenter()
+//    }
+//    dependencies {
+//        classpath 'com.minic.uploadplugin:uploadapk:1.0.0'
+//    }
+//}
 
 
 android {
