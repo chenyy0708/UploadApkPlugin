@@ -1,7 +1,5 @@
 ### 一键上传Debug包到Fir.im、蒲公英等测试平台
 
-[![](https://jitpack.io/v/chenyy0708/UploadApkPlugin.svg)](https://jitpack.io/#chenyy0708/UploadApkPlugin)
-
 适用于公司频繁的打包测试，由于公司安装了Jenkins的机器`Android`和`iOS`共用，`iOS`在打包的时候会占用电脑资源，如果两个一起打包会两个都极其的慢，为了解决这个问题，最近研究了下
 `Gradle`插件上传`Debug`包。
 
@@ -21,7 +19,10 @@ buildscript {
         maven { url 'https://jitpack.io' }
         
         dependencies {
-         classpath 'com.github.chenyy0708:UploadApkPlugin:最新版本'
+         // gradle2.x版本使用
+         classpath 'com.github.chenyy0708:UploadApkPlugin:2.0.0'
+         // gradle3.x版本使用
+         classpath 'com.github.chenyy0708:UploadApkPlugin:3.0.0'
         }
     }
 
@@ -38,22 +39,24 @@ buildscript {
 apply plugin: 'upload.apk'
 
 // 配置上传信息
-uploadApkInfo {
-
-    // 测试平台显示的应用名
-    appName = "TestApp"
-    // 测试平台显示的图片icon，只需要配置app文件夹之后的路径即可，例如src/main/res/mipmap路径即可
-    appIconPath = "src/main/res/mipmap-xxhdpi/ic_launcher.png"
-    // Fir.im平台apitoken
-    apiTokenFir = "xxxxxxxx"
-    // 蒲公英平台配置信息
-    uKeyPgyer = "xxxxxxx"
-    apiKeyPgyer = "xxxxxxx"
-    // 蒲公英上传的类型
-    installTypePgyer = "2"
-    // 蒲公英平台安装密码，蒲公英更新之后都需要，否则无法上传app
-    passWordPgyer = "xxxxx"
-    
+uploadApk {
+    fir {
+        // 测试平台显示的应用名
+        appName = "TestApp"
+        // 测试平台显示的图片icon，只需要配置app文件夹之后的路径即可，例如src/main/res/mipmap路径即可
+        iconPath = "src/main/res/mipmap-xxhdpi/ic_launcher.png"
+        // Fir.im平台apitoken
+        token = "xxxxx"
+    }
+    pgyer {
+        // 蒲公英平台配置信息
+        apiKey = "6f3611f328fea966c664d482be682040"
+        uKey = "555a5e675f08277800b9a72ca447518f"
+        // 蒲公英平台安装密码，蒲公英新版本需要，否则无法上传app
+        password = "123456"
+        // 蒲公英上传的类型
+        installType = "2"
+    }
 }
 ```
 
