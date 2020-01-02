@@ -49,12 +49,12 @@ uploadApk {
         token = "xxxxx"
     }
     pgyer {
-        // 蒲公英平台配置信息
-        apiKey = "6f3611f328fea966c664d482be682040"
-        uKey = "555a5e675f08277800b9a72ca447518f"
-        // 蒲公英平台安装密码，蒲公英新版本需要，否则无法上传app
-        password = "123456"
-        // 蒲公英上传的类型
+        // 蒲公英平台配置信息，具体详情请看蒲公英API上传文档https://www.pgyer.com/doc/api#uploadApp
+        apiKey = "xxxxxxxx"
+        uKey = "xxxxxxxx"
+        // 设置App安装密码，蒲公英新版本需要，否则无法上传app
+        password = "xxxxxx"
+        // 蒲公英应用安装方式，值为(1,2,3)。1：公开，2：密码安装，3：邀请安装。默认为1公开
         installType = "2"
     }
 }
