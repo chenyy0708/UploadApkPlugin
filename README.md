@@ -20,9 +20,9 @@ buildscript {
         
         dependencies {
          // gradle2.x版本使用
-         classpath 'com.github.chenyy0708:UploadApkPlugin:2.0.0'
+         classpath 'com.github.chenyy0708:UploadApkPlugin:2.0.1'
          // gradle3.x版本使用
-         classpath 'com.github.chenyy0708:UploadApkPlugin:3.0.0'
+         classpath 'com.github.chenyy0708:UploadApkPlugin:3.0.1'
         }
     }
 
