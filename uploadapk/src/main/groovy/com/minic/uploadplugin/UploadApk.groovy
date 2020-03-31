@@ -38,7 +38,7 @@ class UploadApk implements Plugin<Project> {
                         build.add("bundle_id", appPackage)
                         build.add("api_token", apiTokenFir)
                         build.add("type", "android")
-                        Request request = new Request.Builder().url("http://api.fir.im/apps").post(build.build()).build()
+                        Request request = new Request.Builder().url("http://api.bq04.com/apps").post(build.build()).build()
                         Response response = client.newCall(request).execute()
                         String is = response.body().string()
                         println("获取凭证信息成功")
@@ -79,7 +79,7 @@ class UploadApk implements Plugin<Project> {
                         String jsonIcon = responseIcon.body().string()
                         println("上传Icon返回结果:" + jsonIcon)
                         // 获取成功连接
-                        String queryurl = "http://api.fir.im/apps/latest/" + appPackage + "?api_token=" + apiTokenFir + "&type=android"
+                        String queryurl = "http://api.bq04.com/apps/latest/" + appPackage + "?api_token=" + apiTokenFir + "&type=android"
                         Request requestUrl = new Request.Builder().url(queryurl).get().build()
                         Response responseUrl = client.newCall(requestUrl).execute()
                         String isUrl = responseUrl.body().string()
